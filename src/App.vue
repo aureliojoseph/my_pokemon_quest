@@ -1,30 +1,234 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app_container">
+    <nav>
+      <h1>Pokemon Quest</h1>
+      <el-input
+        type="text"
+        v-model="searchPokemons"
+        placeholder="Digite o nome do Pokemon"
+        clearable
+      />
+    </nav>
+
+    <div
+      @click="openInfoCard"
+      class="app_container--list"
+    >
+      <div
+        v-for="pokemon in filteredPokemons"
+        :key="pokemon.name"
+      >
+        <app-pokemon-card
+          :pokemon="pokemon"
+          @display-card="showPokemon"
+        />
+      </div>
+    </div>
+
+    <el-dialog
+      v-model="showCardInfo"
+      width="30%"
+      center
+      :show-close="false"
+      >
+
+      <template #header>
+        <img
+          @click="closeInfoCard"
+          src="@/assets/arrow-left-thin.svg"
+          alt="left arrow icon"
+        >
+        <img
+          src="@/assets/heart-thin.svg"
+          alt="heart icon"
+        >
+      </template>
+
+      <div v-if="selectedPokemon">
+        <app-pokemon-types :selectedPokemon="selectedPokemon" />
+        <app-base-stats :selectedPokemon="selectedPokemon" />
+      </div>
+
+    </el-dialog>
   </div>
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+<script>
+  import axios from 'axios'
+  import AppPokemonCard from './components/AppPokemonCard.vue'
+  import AppPokemonTypes from './components/AppPokemonTypes.vue'
+  import AppBaseStats from './components/AppBaseStats.vue'
+
+  export default {
+    name: 'App',
+    components: {
+      AppPokemonCard,
+      AppPokemonTypes,
+      AppBaseStats
+    },
+    data() {
+      return {
+        pokemons: [],
+        searchPokemons: '',
+        showCardInfo: false,
+        selectedPokemon: null
+      }
+    },
+    methods: {
+      showPokemon(id) {
+        axios
+        .get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+        .then((response) => {
+          this.selectedPokemon = response.data
+          return this.showCardInfo = true
+        })
+      },
+
+      openInfoCard() {
+        return this.showCardInfo = true
+      },
+
+      closeInfoCard() {
+        return this.showCardInfo = false
+      }
+    },
+    computed: {
+      filteredPokemons() {
+        return this.pokemons.filter((item) => {
+          return item.name.includes(this.searchPokemons)
+        })
+      }
+    },
+    mounted() {
+      axios
+        .get("https://pokeapi.co/api/v2/pokemon?limit=500")
+        .then((response) => {
+          this.pokemons = response.data.results
+        })
+    }
+  }
+</script>
+
+<style scoped lang="scss">
+  @import "@/assets/_mixins";
+
+  .app_container {
+    background-color: #fff;
+    padding: 0 80px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -9px;
+    
+    nav {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 1rem;
+      position: fixed;
+      background-color: #f8f9fa;
+      width: 99%;
+      box-shadow: 1px 2px 4px 0 rgba(85, 85, 85, 0.161);
+
+      h1 {
+        text-align: center;
+        font-size: 2rem;
+      }
+      
+      &:deep {
+        .el-input {
+          width: 20rem;
+          margin-bottom: 1rem;
+
+          .el-input__wrapper {
+            background-color: #f8f9fa;
+            
+            .el-input__inner {
+              color: #868e96;
+            }
+          }
+        }
+      }
+    }
+
+    .app_container--list {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      margin-top: 9rem;
+    }
+
+    &:deep {
+      .el-dialog {
+        border-radius: 20px;
+
+        .el-dialog__header {
+          margin: 0;
+          padding: 40px 20px 10px;
+          display: flex;
+          justify-content: space-between;
+          background-color: #e3fafc;
+          border-top-left-radius: 20px;
+          border-top-right-radius: 20px;
+          
+          img {
+            width: 18px;
+            cursor: pointer;
+          }
+        }
+
+        .el-dialog__body {
+          padding: 4px;
+          background-color: #e3fafc;
+          border-bottom-left-radius: 20px;
+          border-bottom-right-radius: 20px;
+
+          .el-card {
+            border-radius: 20px;
+
+            .el-card__body {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              background-color: #1098ad;
+
+              .type-card {
+                text-align: center;
+
+                h2 {
+                  color: #fff;
+                }
+
+                .type-card__tag {
+                  display: flex;
+                  gap: 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // responsive between min-width: 992px and max-width: 1439px
+    @include screen-laptop-only {
+      .app_container--list {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    // responsive between min-width: 767px and max-width: 992px
+    @include screen-tablet-only {
+      .app_container--list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    // responsive bellow width: 767px
+    @include screen-mobile {
+      .app_container--list {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
 </style>
