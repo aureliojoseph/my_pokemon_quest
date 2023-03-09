@@ -1,7 +1,53 @@
-# Vue 3 + Vite
+# pokemon_quest
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is My Pokedex!
 
-## Recommended IDE Setup
+For this project I used VueJs 3 with Element Plus, SASS and Phosphor Icons libraries.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+Hope you enjoy searching you favorite Pokemon!
+
+### Find out more about my work on https://aureliojoseph.github.io/landing-page-2.0_eng/
+#### enjoy exploring it ;)
+
+## Languages and Features used:
+
+### VueJs 3
+
+### Scss
+
+### Element Plus
+https://element-plus.org/en-US/
+
+### Phosphor Icons
+
+https://phosphoricons.com/
+
+### Axios
+https://axios-http.com/
+
+##########################################################
+
+Este é o meu Pokédex!
+
+Para este projeto eu usei VueJs 3 com as biblioteca Element Plus, SASS e Phosphor Icons.
+
+Espero que você goste de procurar seu Pokémon favorito!
+
+## Linguagens e Features utilizadas:
+
+### VueJs 3
+
+### Scss
+
+### Element Plus
+https://element-plus.org/en-US/
+
+### Phosphor Icons
+
+https://phosphoricons.com/
+
+### Axios
+https://axios-http.com/
+
+### Descubra mais sobre meu trabalho: https://aureliojoseph.github.io/landing-page-2.0_eng/
+#### divirta-se explorando ;)
